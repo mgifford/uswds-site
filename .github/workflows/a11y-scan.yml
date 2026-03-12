@@ -1,0 +1,90 @@
+name: Accessibility Scanner
+
+on:
+  workflow_dispatch: # Run manually from the Actions tab
+  schedule:
+    - cron: "0 6 * * 1" # Run every Monday at 06:00 UTC
+
+jobs:
+  accessibility_scanner:
+    name: Scan designsystem.digital.gov for accessibility issues
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - uses: github/accessibility-scanner@v2
+        with:
+          urls: |
+            https://designsystem.digital.gov/
+            https://designsystem.digital.gov/documentation/
+            https://designsystem.digital.gov/documentation/developers/
+            https://designsystem.digital.gov/documentation/getting-started-for-developers/
+            https://designsystem.digital.gov/documentation/getting-started-for-designers/
+            https://designsystem.digital.gov/documentation/maturity-model/
+            https://designsystem.digital.gov/documentation/sample-contract-language/
+            https://designsystem.digital.gov/documentation/showcase/
+            https://designsystem.digital.gov/documentation/website-standards/
+            https://designsystem.digital.gov/components/overview/
+            https://designsystem.digital.gov/components/accordion/
+            https://designsystem.digital.gov/components/alert/
+            https://designsystem.digital.gov/components/banner/
+            https://designsystem.digital.gov/components/breadcrumb/
+            https://designsystem.digital.gov/components/button/
+            https://designsystem.digital.gov/components/button-group/
+            https://designsystem.digital.gov/components/card/
+            https://designsystem.digital.gov/components/character-count/
+            https://designsystem.digital.gov/components/checkbox/
+            https://designsystem.digital.gov/components/collection/
+            https://designsystem.digital.gov/components/combo-box/
+            https://designsystem.digital.gov/components/date-picker/
+            https://designsystem.digital.gov/components/date-range-picker/
+            https://designsystem.digital.gov/components/dropdown/
+            https://designsystem.digital.gov/components/file-input/
+            https://designsystem.digital.gov/components/footer/
+            https://designsystem.digital.gov/components/form/
+            https://designsystem.digital.gov/components/header/
+            https://designsystem.digital.gov/components/icon/
+            https://designsystem.digital.gov/components/icon-list/
+            https://designsystem.digital.gov/components/identifier/
+            https://designsystem.digital.gov/components/in-page-navigation/
+            https://designsystem.digital.gov/components/input-mask/
+            https://designsystem.digital.gov/components/input-prefix-suffix/
+            https://designsystem.digital.gov/components/link/
+            https://designsystem.digital.gov/components/list/
+            https://designsystem.digital.gov/components/memorable-date/
+            https://designsystem.digital.gov/components/modal/
+            https://designsystem.digital.gov/components/pagination/
+            https://designsystem.digital.gov/components/process-list/
+            https://designsystem.digital.gov/components/prose/
+            https://designsystem.digital.gov/components/radio-buttons/
+            https://designsystem.digital.gov/components/range-slider/
+            https://designsystem.digital.gov/components/search/
+            https://designsystem.digital.gov/components/select/
+            https://designsystem.digital.gov/components/side-navigation/
+            https://designsystem.digital.gov/components/site-alert/
+            https://designsystem.digital.gov/components/step-indicator/
+            https://designsystem.digital.gov/components/summary-box/
+            https://designsystem.digital.gov/components/table/
+            https://designsystem.digital.gov/components/tag/
+            https://designsystem.digital.gov/components/text-input/
+            https://designsystem.digital.gov/components/time-picker/
+            https://designsystem.digital.gov/components/tooltip/
+            https://designsystem.digital.gov/components/validation/
+            https://designsystem.digital.gov/design-tokens/
+            https://designsystem.digital.gov/design-tokens/color/overview/
+            https://designsystem.digital.gov/design-tokens/typesetting/overview/
+            https://designsystem.digital.gov/design-tokens/spacing-units/
+            https://designsystem.digital.gov/design-tokens/flex/
+            https://designsystem.digital.gov/design-tokens/opacity/
+            https://designsystem.digital.gov/design-tokens/order/
+            https://designsystem.digital.gov/design-tokens/shadow/
+            https://designsystem.digital.gov/utilities/
+            https://designsystem.digital.gov/patterns/
+            https://designsystem.digital.gov/whats-new/overview/
+            https://designsystem.digital.gov/whats-new/product-roadmap/
+            https://designsystem.digital.gov/about/overview/
+            https://designsystem.digital.gov/about/community/
+            https://designsystem.digital.gov/about/contribute/
+          repository: mgifford/uswds-site
+          token: ${{ secrets.GH_TOKEN }}
+          cache_key: designsystem.digital.gov
+          skip_copilot_assignment: true
