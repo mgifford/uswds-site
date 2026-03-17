@@ -13,6 +13,34 @@ jobs:
       contents: read
       issues: write
     steps:
+      # The accessibility scanner requires a Personal Access Token (PAT) stored
+      # as GH_TOKEN — the built-in GITHUB_TOKEN cannot be used because the
+      # scanner writes to the gh-cache branch (contents:write), files issues
+      # (issues:write), and optionally opens fix PRs (pull-requests:write).
+      # This step detects a missing or empty secret and prints clear instructions
+      # before the scanner step can fail with an opaque error.
+      - name: Verify GH_TOKEN secret is configured
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error title=GH_TOKEN secret not configured::A fine-grained PAT is required — GITHUB_TOKEN cannot be used. See https://github.com/github/accessibility-scanner#2-create-a-token-and-add-a-secret"
+            echo ""
+            echo "Why a PAT is required:"
+            echo "  The accessibility scanner needs permissions that GITHUB_TOKEN does not provide:"
+            echo "    - contents:write  (push cached results to the gh-cache branch)"
+            echo "    - issues:write    (file accessibility findings as GitHub Issues)"
+            echo "    - pull-requests:write (open AI-powered fix PRs via GitHub Copilot)"
+            echo ""
+            echo "How to fix:"
+            echo "  1. Create a fine-grained PAT at https://github.com/settings/tokens"
+            echo "     with the above permissions scoped to this repository."
+            echo "  2. Add it as a repository secret named GH_TOKEN:"
+            echo "     Settings > Secrets and variables > Actions > New repository secret"
+            exit 1
+          fi
+          echo "GH_TOKEN is present — proceeding with accessibility scan."
+
       - uses: github/accessibility-scanner@v2
         with:
           urls: |
@@ -87,6 +115,6 @@ jobs:
             https://designsystem.digital.gov/about/community/
             https://designsystem.digital.gov/about/contribute/
           repository: mgifford/uswds-site
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           cache_key: designsystem.digital.gov
           skip_copilot_assignment: true
